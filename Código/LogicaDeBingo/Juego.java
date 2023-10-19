@@ -31,21 +31,29 @@ public class Juego {
     }
     
     public boolean validarJugador(Jugador pJugador) {
-        boolean jugadorRepetido = false;
+        boolean jugadorRepetido = false; //Variables booleana para control
         
         for (Jugador jugadorExistente : listaJugadores) {
+            //Comparación de las cédulas
             if (jugadorExistente.getCedula() == pJugador.getCedula()) {
                 jugadorRepetido = true;
-                break;
+                return jugadorRepetido;
             }
         }
+        return jugadorRepetido;
+    }
+    
+    public void registrarJugador(String nombreCompleto, int cedula, String correo) {
+        Jugador newPlayer = new Jugador(nombreCompleto, cedula, correo);
         
-        if (!jugadorRepetido) {
-            listaJugadores.add(pJugador);
+        if (validarJugador(newPlayer)) {
+            //Añade al jugador al juego
+            listaJugadores.add(newPlayer);
             totalJugadores++;
-            return true;
-        } else {
-            return false;
         }
+    }
+    
+    public void enviarCartonAJugador() {
+        
     }
 }
