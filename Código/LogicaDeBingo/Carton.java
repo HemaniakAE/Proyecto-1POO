@@ -23,12 +23,15 @@ public class Carton {
   public String codigoCarton;
   private int[][] matriz;
   private static int contadorCartones = 0;
+  protected static ArrayList<Carton> listaCartonesGenerados = new ArrayList<>();
+
 
   public Carton() {
     this.codigoCarton = generarCodigoCarton();
     this.matriz = new int[5][5];
     llenarMatriz();
     generarImagen();
+    listaCartonesGenerados.add(this);
   }
 
   private String generarCodigoCarton() {
@@ -122,6 +125,9 @@ public class Carton {
     g.dispose();
   }
 
+    public static int getContadorCartones() {
+          return contadorCartones;
+    }
 
   public static void main(String[] args) {
     ArrayList<Carton> lista = generarCartones(5);  //ejemplo 5 cartones
@@ -131,4 +137,5 @@ public class Carton {
       System.out.println("-----------------------------------");
     }
   }
+
 }

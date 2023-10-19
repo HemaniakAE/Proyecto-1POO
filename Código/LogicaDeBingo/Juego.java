@@ -3,6 +3,10 @@ package LogicaDeBingo;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Random;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * Clase juego.
@@ -14,6 +18,7 @@ import java.time.LocalTime;
 public class Juego {
     
     private Jugador jugador;
+    private Carton carton;
     private Configuracion tipoDeJuego;
     private double premio;
     private ArrayList<Integer> listaDeBolas;
@@ -53,7 +58,61 @@ public class Juego {
         }
     }
     
-    public void enviarCartonAJugador() {
-        
+    public boolean enviarCartonAJugador(int pCantidadDeCartones, int pCedula) {
+        int totalCartones = Carton.getContadorCartones();
+        if(pCantidadDeCartones <= totalCartones) {
+            Jugador jugadorEncontrado = null;
+            for (Jugador jugador : listaJugadores) {
+                if (jugador.getCedula() == pCedula) {
+                    jugadorEncontrado = jugador;
+                    break; // Terminar el bucle si se encuentra el jugador
+                }
+            }
+            if(jugadorEncontrado == null) {
+                return false;
+            }
+            // Seleccionar n cartones aleatorios
+            ArrayList<Carton> cartonesSeleccionados = new ArrayList<>();
+            Random rand = new Random();
+            
+            while (cartonesSeleccionados.size() < pCantidadDeCartones) {
+                int indiceAleatorio = rand.nextInt(totalCartones);
+                Carton cartonAleatorio = Carton.listaCartonesGenerados.get(indiceAleatorio);
+                
+                if (!cartonesSeleccionados.contains(cartonAleatorio)) {
+                    cartonesSeleccionados.add(cartonAleatorio);
+                }
+            }
+            // Carpeta para almacenar los cartones seleccionados
+            File carpetaCartonesSeleccionados = new File("cartonesSeleccionados");
+            if (!carpetaCartonesSeleccionados.exists()) {
+                carpetaCartonesSeleccionados.mkdir(); // Crea la carpeta si no existe
+            }
+
+            // Copiar los archivos de los cartones seleccionados en la carpeta
+            for (Carton carton : cartonesSeleccionados) {
+                String codigoCarton = carton.codigoCarton;
+                File archivoOrigen = new File("cartones/" + codigoCarton + ".png");
+                File archivoDestino = new File("cartonesSeleccionados/" + codigoCarton + ".png");
+
+                try {
+                    Files.copy(archivoOrigen.toPath(), archivoDestino.toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Enviar los archivos de cartones al correo del jugador
+            String correo = jugadorEncontrado.getCorreo();
+            // Implementa el envío de correo con los archivos adjuntos aquí
+
+            return true;
+            
+            
+        } 
+        return false; 
     }
+    
+    
+    
 }
