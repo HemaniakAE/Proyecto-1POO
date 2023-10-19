@@ -7,6 +7,7 @@ import java.util.Random;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.ZoneId;
 
 /**
  * Clase juego.
@@ -27,11 +28,11 @@ public class Juego {
     private LocalDate fechaDelJuego;
     private LocalTime horaDelJuego;
     
-    public Juego(Configuracion pTipoDeJuego, double pPremio, LocalDate pFechaDelJuego, LocalTime pHoraDelJuego) {
+    public Juego(Configuracion pTipoDeJuego, double pPremio) {
         this.tipoDeJuego = pTipoDeJuego;
         this.premio = pPremio;
-        this.fechaDelJuego = pFechaDelJuego;
-        this.horaDelJuego = pHoraDelJuego; 
+        this.fechaDelJuego = LocalDate.now(ZoneId.systemDefault()); // Obtiene la fecha actual del sistema
+        this.horaDelJuego = LocalTime.now(ZoneId.systemDefault()); // Obtiene la hora actual del sistema
         totalJugadores = 0;
     }
     
@@ -112,6 +113,8 @@ public class Juego {
         } 
         return false; 
     }
+    
+   
     
     
     

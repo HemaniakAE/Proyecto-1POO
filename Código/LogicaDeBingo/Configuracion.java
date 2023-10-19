@@ -8,5 +8,5 @@ package LogicaDeBingo;
  * @version (16/10/2023)
  */
 public enum Configuracion {
-    JUGARX, CUATROESQUINAS, CARTONLLENO, JUGARZ
+    X, Z, E, L
 }
