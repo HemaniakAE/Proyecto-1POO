@@ -10,7 +10,7 @@ import javax.mail.MessagingException;
 
 public class CuentaCorreo {
   private String usuario;
-  private String clave = "uhitnwhfljcxmrrl";
+  private String clave = "ckerpjofqvgxizkv";
   private String servidor = "smtp.gmail.com";
   private String puerto = "587";
   private Properties propiedades;
