@@ -37,18 +37,7 @@ public class Bola {
     return numeroSeleccionado;
   }
   
-  public static void main(String[] args) {
-    Bola bola = new Bola();
-
-    for (int i = 0; i < 10; i++) {
-      try {
-        int numero = bola.generarNumeroAleatorio();
-        System.out.println("Número generado: " + numero);
-      } catch (IllegalStateException e) {
-        System.out.println(e.getMessage());
-        break;  // Si ya no hay números, rompe el ciclo
-      }
-    }
+  public List<Integer> getNumerosPorLlamar() {
+    return numerosPorLlamar;
   }
-  
 }
