@@ -131,8 +131,10 @@ public class Carton {
 
   public static void main(String[] args) {
     ArrayList<Carton> lista = generarCartones(5);  //ejemplo 5 cartones
+    
     for (Carton carton : lista) {
       System.out.println("Código del cartón: " + carton.codigoCarton);
+      
       carton.imprimirMatriz();
       System.out.println("-----------------------------------");
     }

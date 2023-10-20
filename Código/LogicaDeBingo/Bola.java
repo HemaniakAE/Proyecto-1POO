@@ -1,3 +1,5 @@
+package LogicaDeBingo;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
@@ -5,17 +7,17 @@ import java.util.List;
 public class Bola {
   private List<Integer> numerosPorLlamar;
   private Random random = new Random();
-
+    
   public Bola() {
     resetearNumeros();
   }
-
+    
     private void resetearNumeros() {
     numerosPorLlamar = new ArrayList<>();
     for (int i = 1; i <= 75; i++) {
       numerosPorLlamar.add(i);
     }
-  }
+  } 
   
   // Genera un número aleatorio sin repetición
   public int generarNumeroAleatorio() {
