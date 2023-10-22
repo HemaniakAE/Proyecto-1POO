@@ -16,14 +16,11 @@ public class Jugador {
   private int cedula;
   private String correo;
   private static final String FILENAME = "jugadores.csv";
-  private ArrayList<Carton> cartonesAsignados;
 
   public Jugador(String pNombreCompleto, int pCedula, String pCorreo) {
     this.nombreCompleto = pNombreCompleto;
     this.cedula = pCedula;
     this.correo = pCorreo;
-    cartonesAsignados = new ArrayList<>();
-    
   }
 
   public String getNombreCompleto() {
@@ -36,14 +33,6 @@ public class Jugador {
 
   public String getCorreo() {
     return correo;
-  }
-  
-  public void asignarCarton(Carton pCarton) {
-    cartonesAsignados.add(pCarton);
-  }
-  
-  public ArrayList<Carton> getCartonesAsignados() {
-    return cartonesAsignados;
   }
 
   // Añade el jugador al archivo CSV
