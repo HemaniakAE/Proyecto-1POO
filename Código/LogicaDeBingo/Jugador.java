@@ -1,26 +1,29 @@
 package LogicaDeBingo;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.regex.Pattern;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Clase Jugador Abstracción en código de los jugadores del bingo
- *
- * @author (Heldyis Agüero)
- * @version (16/10/2023 )
- */
+
 public class Jugador {
 
-  private Carton carton;
   private String nombreCompleto;
   private int cedula;
   private String correo;
-  private ArrayList<String> cartonesAsignados;
+  private static final String FILENAME = "jugadores.csv";
+  private ArrayList<Carton> cartonesAsignados;
 
   public Jugador(String pNombreCompleto, int pCedula, String pCorreo) {
     this.nombreCompleto = pNombreCompleto;
     this.cedula = pCedula;
     this.correo = pCorreo;
     cartonesAsignados = new ArrayList<>();
+    
   }
 
   public String getNombreCompleto() {
@@ -34,31 +37,85 @@ public class Jugador {
   public String getCorreo() {
     return correo;
   }
-
-  public void asignarCarton(String pCodeCarton) {
-    cartonesAsignados.add(pCodeCarton);
+  
+  public void asignarCarton(Carton pCarton) {
+    cartonesAsignados.add(pCarton);
   }
   
-  public ArrayList<String> getCartonesAsignados() {
+  public ArrayList<Carton> getCartonesAsignados() {
     return cartonesAsignados;
   }
-  
-  public String toString() {
-    StringBuilder cuerpoCorreo = new StringBuilder();
-    cuerpoCorreo.append("Estimado ").append(nombreCompleto).append(",\n\n");
-    cuerpoCorreo.append("Te enviamos a continuación adjuntamos tus cartones para el juego de bingo:\n\n");
 
-    // Agrega los códigos de los cartones asignados
-    cuerpoCorreo.append("Tus cartones:\n");
-    for (String codigoCarton : cartonesAsignados) {
-        cuerpoCorreo.append("- ").append(codigoCarton).append("\n");
+  // Añade el jugador al archivo CSV
+  public void guardar() throws IOException {
+    if (!correoValido(correo)) {
+      throw new IllegalArgumentException("Correo inválido");
+    }
+    if (cedulaExiste(this.cedula)) {
+      throw new IllegalArgumentException("Cédula ya registrada");
+    }
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME, true))) {
+      bw.write(this.cedula + "," + this.nombreCompleto + "," + this.correo);
+      bw.newLine();
+    }
+  }
+
+  private static boolean cedulaExiste(int cedula) {
+    try (BufferedReader br = new BufferedReader(new FileReader(FILENAME))) {
+      String line;
+      while ((line = br.readLine()) != null) {
+        int cedulaExistente = Integer.parseInt(line.split(",")[0]);
+        if (cedula == cedulaExistente) {
+          return true;
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  private static boolean correoValido(String email) {
+    // Patrón para validar el email
+    Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    return pattern.matcher(email).find();
+  }
+
+  public static List<String> listarJugadores() throws IOException {
+    List<String> jugadores = new ArrayList<>();
+
+    try (BufferedReader br = new BufferedReader(new FileReader(FILENAME))) {
+      String line;
+      while ((line = br.readLine()) != null) {
+        String[] data = line.split(",");
+        String jugador = "Cédula: " + data[0] + ", Nombre: " + data[1] + ", Correo: " + data[2];
+        jugadores.add(jugador);
+      }
+    } catch (IOException e) {
+      throw e;
     }
 
-    cuerpoCorreo.append("\n");
-    cuerpoCorreo.append("¡Buena suerte en el juego de bingo!\n\n");
-    cuerpoCorreo.append("Atentamente,\n");
-    cuerpoCorreo.append("El equipo de Bingo");
+    return jugadores;
+  }
 
-    return cuerpoCorreo.toString();
+  public static void main(String[] args) {
+    // Crear un jugador
+    Jugador jugador1 = new Jugador("Ana Rodríguez", 23456789, "ana.rodriguez@example.com");
+    Jugador jugador2 = new Jugador("Carlos Torres", 34567890, "carlos.torres@example.net");
+    Jugador jugador3 = new Jugador("Beatriz Méndez", 45678901, "beatriz.mendez@example.org");
+
+    try {
+      // Guardar el jugador en el archivo CSV
+      jugador1.guardar();
+      jugador2.guardar();
+      jugador3.guardar();
+      System.out.println("Jugador registrado exitosamente!");
+    } catch (IllegalArgumentException e) {
+      // Mostrar errores como correo inválido o cédula ya registrada
+      System.out.println(e.getMessage());
+    } catch (IOException e) {
+      // Mostrar errores relacionados con la manipulación del archivo
+      System.out.println("Error al guardar el jugador: " + e.getMessage());
+    }
   }
 }

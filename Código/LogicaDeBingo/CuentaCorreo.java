@@ -1,5 +1,4 @@
 package LogicaDeBingo;
-
 import java.util.Properties;
 import java.util.List;
 import java.util.Arrays;
@@ -23,8 +22,8 @@ public class CuentaCorreo {
   private String servidor = "smtp.gmail.com";
   private String puerto = "587";
   private Properties propiedades;
-  
-  public CuentaCorreo (String pCorreo) {
+
+  public CuentaCorreo(String pCorreo) {
     propiedades = new Properties();
     propiedades.put("mail.smtp.host", servidor);
     propiedades.put("mail.smtp.port", puerto);
@@ -32,17 +31,17 @@ public class CuentaCorreo {
     propiedades.put("mail.smtp.starttls.enable", "true");
     usuario = pCorreo;
   }
-  
+
   private Session abrirSession() {
     Session sesion = Session.getInstance(propiedades,
-      new javax.mail.Authenticator() {
-        protected PasswordAuthentication getPasswordAuthentication() {
-          return new PasswordAuthentication(usuario, clave);
-        }
+    new javax.mail.Authenticator() {
+      protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(usuario, clave);
+      }
     });
     return sesion;
   }
-  
+
   public void enviarCorreo(String destinatario, String tituloCorreo, String cuerpo, List<String> rutasImagenes) {
     Session sesion = abrirSession();
 
@@ -85,7 +84,7 @@ public class CuentaCorreo {
   public static void main(String[] args) {
     CuentaCorreo cuenta = new CuentaCorreo("bingoteclimon@gmail.com");
 
-    String destinatario = "heldyis1020@gmail.com";
+    String destinatario = "quiriatoa@gmail.com";
     String titulo = "Prueba de Envío de Correo";
     String mensaje = "Hola mundo, enviando correo...";
 

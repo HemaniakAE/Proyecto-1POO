@@ -1,5 +1,4 @@
 package LogicaDeBingo;
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
@@ -7,17 +6,17 @@ import java.util.List;
 public class Bola {
   private List<Integer> numerosPorLlamar;
   private Random random = new Random();
-    
+
   public Bola() {
     resetearNumeros();
   }
-    
+
     private void resetearNumeros() {
     numerosPorLlamar = new ArrayList<>();
     for (int i = 1; i <= 75; i++) {
       numerosPorLlamar.add(i);
     }
-  } 
+  }
   
   // Genera un número aleatorio sin repetición
   public int generarNumeroAleatorio() {
@@ -37,7 +36,18 @@ public class Bola {
     return numeroSeleccionado;
   }
   
-  public List<Integer> getNumerosPorLlamar() {
-    return numerosPorLlamar;
+  public static void main(String[] args) {
+    Bola bola = new Bola();
+
+    for (int i = 0; i < 10; i++) {
+      try {
+        int numero = bola.generarNumeroAleatorio();
+        System.out.println("Número generado: " + numero);
+      } catch (IllegalStateException e) {
+        System.out.println(e.getMessage());
+        break;  // Si ya no hay números, rompe el ciclo
+      }
+    }
   }
+  
 }

@@ -1,5 +1,9 @@
 package LogicaDeBingo;
 
+import static LogicaDeBingo.Configuracion.E;
+import static LogicaDeBingo.Configuracion.L;
+import static LogicaDeBingo.Configuracion.X;
+import static LogicaDeBingo.Configuracion.Z;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
@@ -19,26 +23,46 @@ import java.time.ZoneId;
 public class Juego {
 
   private final Bola  bolas = new Bola();
+  private Bingo bingo;
   private Configuracion tipoDeJuego;
   private double premio;
-  private final ArrayList<Integer> listaDeBolas;
-  private final ArrayList<Jugador> listaJugadores;
   private ArrayList<Integer> numerosCantados;
   private LocalDate fechaDelJuego;
   private LocalTime horaDelJuego;
+  
 
-  public Juego(Configuracion pTipoDeJuego, double pPremio) {
+  public Juego(Configuracion pTipoDeJuego, double pPremio, Bingo pBingo) {
     this.tipoDeJuego = pTipoDeJuego;
     this.premio = pPremio;
     this.fechaDelJuego = LocalDate.now(ZoneId.systemDefault()); // Obtiene la fecha actual del sistema
     this.horaDelJuego = LocalTime.now(ZoneId.systemDefault()); // Obtiene la hora actual del sistema
-    listaJugadores = new ArrayList<>(); // Inicializa la lista de jugadores
-    listaDeBolas = new ArrayList<>();
+    this.bingo = pBingo;
     numerosCantados = new ArrayList<>();
   }
   
-  public void generarBolas() {
+  public int generarBolas() {
     int numeroCantado = bolas.generarNumeroAleatorio();
     numerosCantados.add(numeroCantado);
+    return numeroCantado;
+  }
+  
+  public ArrayList<Integer> getNumerosCantados() {
+    return numerosCantados;
+  }
+  
+  public static void main(String[] args) {
+    Bola bolas = new Bola();
+    Bingo bingo = new Bingo();
+    Juego juego = new Juego(Configuracion.X, 500, bingo);
+    int i = 0;
+    while(i < 75){
+      int bola = juego.generarBolas();
+      System.out.println("bola: " + bola);
+      i++;
+    }
+    System.out.println("Total de bolas generadas");
+    System.out.println("Lista de bolas: " + juego.getNumerosCantados());
   }
 }
+
+
