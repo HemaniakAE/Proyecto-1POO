@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.io.File;
+import java.util.Iterator;
+
 
 /**
  * Clase Bingo. Abstracción de la clase bingo.
@@ -30,7 +32,10 @@ public class Bingo {
     for (Jugador jugadorExistente : listaJugadores) {
       //Comparación de las cédulas
       if (jugadorExistente.getCedula() == pJugador.getCedula()) {
-        jugadorRepetido = true;
+        String correoJugador = jugadorExistente.getCorreo();
+        if(jugadorExistente.correoValido(correoJugador)) {
+          jugadorRepetido = true;
+        }
         return jugadorRepetido;
       }
     }
@@ -49,6 +54,7 @@ public class Bingo {
 
   public boolean enviarCartonAJugador(int pCantidadDeCartones, int pCedula) {
     int totalCartones = Carton.getContadorCartones(); //Obtiene el total de cartones generados
+    
     //Compara la cantidad de cartones total con la cantidad de cartones solicitados
     if (pCantidadDeCartones <= totalCartones) {
       Jugador jugadorEncontrado = null;
@@ -87,24 +93,28 @@ public class Bingo {
                         archivo = cartonesAleatorios.get(0); // Elige otro cartón aleatorio
                     } else {
                         // Cartón no asignado, asígnalo al jugador y agrega a la lista de asignados
-                        jugadorEncontrado.asignarCarton(cartonPorAsignar);
-                        cartonesYaAsignados.add(cartonPorAsignar);
-                        cartonAsignado = true;
+                        
                         String rutaImagen = archivo.getAbsolutePath(); // Obtiene la ruta absoluta de la imagen
                         rutaImagenes.add(rutaImagen); // Agrega la ruta a la lista
+                        cartonAsignado = true;
+                        if(cartonAsignado) {
+                          jugadorEncontrado.asignarCarton(cartonPorAsignar);
+                          cartonesYaAsignados.add(cartonPorAsignar);
+                        }
                     }
                 }
             }
         }
       String correoJugador = jugadorEncontrado.getCorreo();
       String cuerpoCorreo = jugadorEncontrado.toString();
-      //Envío de mail
+      
       CuentaCorreo correoBingo = new CuentaCorreo("bingoteclimon@gmail.com"); //Crea una instancia de correo
       correoBingo.enviarCorreo(correoJugador, "Cartones de Bingo",cuerpoCorreo , rutaImagenes);
       return true;
     }
     return false;
   }
+
   
   public List<File> obtenerArchivosAleatoriosEnCarpeta(String nombreCarpeta, int cantidadArchivos) {
     File carpeta = new File(nombreCarpeta);

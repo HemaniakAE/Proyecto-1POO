@@ -1,4 +1,5 @@
 package LogicaDeBingo;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.awt.Color;
@@ -8,17 +9,31 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 
+/**
+ * Clase Carton.
+ * Abstracción para codificación de los cartones
+ * de un bingo.
+ * 
+ * @author (Quiriat Mata) 
+ * @version (15/10/2023)
+ */
+
 public class Carton {
 
   public String codigoCarton;
   private int[][] matriz;
   private static int contadorCartones = 0;
+  private boolean [] diagonales;
+  private static ArrayList<Carton> listaCartonesGenerados = new ArrayList<>();
+
 
   public Carton() {
     this.codigoCarton = generarCodigoCarton();
     this.matriz = new int[5][5];
     llenarMatriz();
     generarImagen();
+    listaCartonesGenerados.add(this);
+    diagonales = new boolean[2 * matriz.length];
   }
 
   private String generarCodigoCarton() {
@@ -112,4 +127,45 @@ public class Carton {
     g.dispose();
   }
 
+  public static int getContadorCartones() {
+    return contadorCartones;
+  }
+    
+  public int[][] getMatriz() {
+      return matriz;
+  }
+  
+  public static ArrayList<Carton> getListaCartonesGenerados() {
+    return listaCartonesGenerados;
+  }
+  
+  public String getCodigoCarton() {
+    return codigoCarton;
+  }
+  
+  public static Carton getCartonPorCodigo(String pCodigoCarton) {
+    ArrayList<Carton> listaCartones = getListaCartonesGenerados();
+    Carton cartonEncontrado = null;
+    for(Carton carton : listaCartones) {
+      String codigoCarton = carton.getCodigoCarton();
+      if(codigoCarton.equals(pCodigoCarton)) {
+        cartonEncontrado = carton;
+      }
+    }
+    return cartonEncontrado;
+  }
+  
+  public static void main(String[] args) {
+    ArrayList<Carton> lista = generarCartones(4);  //ejemplo 5 cartones
+    
+    for (Carton carton : lista) {
+      System.out.println("Código del cartón: " + carton.getCodigoCarton());
+      carton.imprimirMatriz();
+      System.out.println("-----------------------------------");
+      System.out.println("Lista de cartones:\n " + carton.getListaCartonesGenerados());
+    } 
+    System.out.println("Segundo cartón generado:\n " + Carton.getCartonPorCodigo("HQ002"));
+    
+    
+  }
 }

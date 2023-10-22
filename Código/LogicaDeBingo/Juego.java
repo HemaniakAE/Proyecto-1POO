@@ -1,63 +1,68 @@
 package LogicaDeBingo;
- 
 
+import static LogicaDeBingo.Configuracion.E;
+import static LogicaDeBingo.Configuracion.L;
+import static LogicaDeBingo.Configuracion.X;
+import static LogicaDeBingo.Configuracion.Z;
 import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Random;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.time.ZoneId;
 
+
+
 /**
- * Clase juego.
- * Abstracción de la clase juego.
- * 
- * @author (Heldyis Agüero Espinoza) 
- * @version (17/10/20)
+ * Clase juego. Abstracción de la clase juego.
+ *
+ * @author (Heldyis Agüero Espinoza)
+ * @version (18/10/20)
  */
 public class Juego {
-    
-  private Jugador jugador;
-  private Carton carton;
+
+  private final Bola  bolas = new Bola();
+  protected Bingo bingo;
   private Configuracion tipoDeJuego;
   private double premio;
-  private ArrayList<Integer> listaDeBolas;
-  private ArrayList<Jugador> listaJugadores;
-  private static int totalJugadores;
+  private ArrayList<Integer> numerosCantados;
   private LocalDate fechaDelJuego;
   private LocalTime horaDelJuego;
-    
-  public Juego(Configuracion pTipoDeJuego, double pPremio) {
+  
+
+  public Juego(Configuracion pTipoDeJuego, double pPremio, Bingo pBingo) {
     this.tipoDeJuego = pTipoDeJuego;
     this.premio = pPremio;
     this.fechaDelJuego = LocalDate.now(ZoneId.systemDefault()); // Obtiene la fecha actual del sistema
     this.horaDelJuego = LocalTime.now(ZoneId.systemDefault()); // Obtiene la hora actual del sistema
-    totalJugadores = 0;
+    this.bingo = pBingo;
+    numerosCantados = new ArrayList<>();
   }
-    
-  public boolean validarJugador(Jugador pJugador) {
-    boolean jugadorRepetido = false; //Variables booleana para control
-        
-    for (Jugador jugadorExistente : listaJugadores) {
-      //Comparación de las cédulas
-      if (jugadorExistente.getCedula() == pJugador.getCedula()) {
-        jugadorRepetido = true;
-        return jugadorRepetido;
-      }
-    }
-    return jugadorRepetido;
-    }
-    
-  public void registrarJugador(String nombreCompleto, int cedula, String correo) {
-    Jugador newPlayer = new Jugador(nombreCompleto, cedula, correo);
-        
-    if (validarJugador(newPlayer)) {
-      //Añade al jugador al juego
-      listaJugadores.add(newPlayer);
-      totalJugadores++;
-    }
+  
+  public int generarBolas() {
+    int numeroCantado = bolas.generarNumeroAleatorio();
+    numerosCantados.add(numeroCantado);
+    return numeroCantado;
   }
-    
+  
+  public ArrayList<Integer> getNumerosCantados() {
+    return numerosCantados;
+  }
+  
+  public static void main(String[] args) {
+    Bola bolas = new Bola();
+    Bingo bingo = new Bingo();
+    Juego juego = new Juego(Configuracion.X, 500, bingo);
+    int i = 0;
+    while(i < 75){
+      int bola = juego.generarBolas();
+      System.out.println("bola: " + bola);
+      i++;
+    }
+    System.out.println("Total de bolas generadas");
+    System.out.println("Lista de bolas: " + juego.getNumerosCantados());
+  }
 }
+
+

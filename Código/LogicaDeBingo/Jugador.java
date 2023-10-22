@@ -16,12 +16,19 @@ public class Jugador {
   private int cedula;
   private String correo;
   private static final String FILENAME = "jugadores.csv";
+  private ArrayList<Carton> cartonesAsignados;
 
   public Jugador(String pNombreCompleto, int pCedula, String pCorreo) {
     this.nombreCompleto = pNombreCompleto;
     this.cedula = pCedula;
     this.correo = pCorreo;
+    cartonesAsignados = new ArrayList<>();
+    
   }
+  
+  public String toString() {
+        return "Nombre: " + nombreCompleto + ", DNI: " + cedula + ", Correo: " + correo;
+    }
 
   public String getNombreCompleto() {
     return nombreCompleto;
@@ -33,6 +40,14 @@ public class Jugador {
 
   public String getCorreo() {
     return correo;
+  }
+  
+  public void asignarCarton(Carton pCarton) {
+    cartonesAsignados.add(pCarton);
+  }
+  
+  public ArrayList<Carton> getCartonesAsignados() {
+    return cartonesAsignados;
   }
 
   // Añade el jugador al archivo CSV
@@ -64,7 +79,7 @@ public class Jugador {
     return false;
   }
 
-  private static boolean correoValido(String email) {
+  public static boolean correoValido(String email) {
     // Patrón para validar el email
     Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     return pattern.matcher(email).find();
