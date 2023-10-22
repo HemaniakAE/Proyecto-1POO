@@ -1,6 +1,6 @@
 # Proyecto-1POO
 
-# Integrantes
+Integrantes:
 Heldyis Agüero Espinoza [2023296812]
 Quiriat Mata Araya []
 
