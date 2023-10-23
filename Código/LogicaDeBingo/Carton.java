@@ -8,32 +8,20 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
-
-/**
- * Clase Carton.
- * Abstracción para codificación de los cartones
- * de un bingo.
- * 
- * @author (Quiriat Mata) 
- * @version (15/10/2023)
- */
+import java.io.PrintWriter;
 
 public class Carton {
 
   public String codigoCarton;
   private int[][] matriz;
   private static int contadorCartones = 0;
-  private boolean [] diagonales;
-  private static ArrayList<Carton> listaCartonesGenerados = new ArrayList<>();
-
 
   public Carton() {
     this.codigoCarton = generarCodigoCarton();
     this.matriz = new int[5][5];
     llenarMatriz();
-    generarImagen();
-    listaCartonesGenerados.add(this);
-    diagonales = new boolean[2 * matriz.length];
+    llenarMatriz();
+    guardarMatrizEnArchivo();
   }
 
   private String generarCodigoCarton() {
@@ -53,20 +41,19 @@ public class Carton {
         do {
           numeroAleatorio = inicio + random.nextInt(fin - inicio + 1);
         } while (numerosGenerados.contains(numeroAleatorio)); // Repite hasta obtener un número no generado previamente
-            
+
         numerosGenerados.add(numeroAleatorio); // Agrega el número generado a la lista
         matriz[fila][columna] = numeroAleatorio; // Asigna el número a la matriz
       }
     }
   }
 
-
   public static ArrayList<Carton> generarCartones(int pCantidadCartones) {
     ArrayList<Carton> listaCartones = new ArrayList<>();
 
     for (int i = 0; i < pCantidadCartones && i < 500; i++) {
-        Carton carton = new Carton();
-        listaCartones.add(carton);
+      Carton carton = new Carton();
+      listaCartones.add(carton);
     }
     return listaCartones;
   }
@@ -79,7 +66,7 @@ public class Carton {
       System.out.println();
     }
   }
-  
+
   private void generarImagen() {
     int width = 300; // Define el ancho de la imagen
     int height = 300; // Define el alto de la imagen
@@ -127,45 +114,19 @@ public class Carton {
     g.dispose();
   }
 
-  public static int getContadorCartones() {
-    return contadorCartones;
-  }
-    
-  public int[][] getMatriz() {
-      return matriz;
-  }
-  
-  public static ArrayList<Carton> getListaCartonesGenerados() {
-    return listaCartonesGenerados;
-  }
-  
-  public String getCodigoCarton() {
-    return codigoCarton;
-  }
-  
-  public static Carton getCartonPorCodigo(String pCodigoCarton) {
-    ArrayList<Carton> listaCartones = getListaCartonesGenerados();
-    Carton cartonEncontrado = null;
-    for(Carton carton : listaCartones) {
-      String codigoCarton = carton.getCodigoCarton();
-      if(codigoCarton.equals(pCodigoCarton)) {
-        cartonEncontrado = carton;
+  private void guardarMatrizEnArchivo() {
+    try (PrintWriter out = new PrintWriter("matrices/" + codigoCarton + ".txt")) {
+      for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+          out.print(matriz[i][j]);
+          if (j < 4) {
+            out.print(","); // separa los números con comas
+          }
+        }
+        out.println(); // salto de línea después de cada fila
       }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    return cartonEncontrado;
-  }
-  
-  public static void main(String[] args) {
-    ArrayList<Carton> lista = generarCartones(4);  //ejemplo 5 cartones
-    
-    for (Carton carton : lista) {
-      System.out.println("Código del cartón: " + carton.getCodigoCarton());
-      carton.imprimirMatriz();
-      System.out.println("-----------------------------------");
-      System.out.println("Lista de cartones:\n " + carton.getListaCartonesGenerados());
-    } 
-    System.out.println("Segundo cartón generado:\n " + Carton.getCartonPorCodigo("HQ002"));
-    
-    
   }
 }
