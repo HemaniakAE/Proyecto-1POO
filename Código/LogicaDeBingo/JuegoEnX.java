@@ -1,27 +1,30 @@
 package LogicaDeBingo;
 
+import Ventanas.MenuEnviarCarton;
 import java.util.ArrayList;
+import javax.swing.JFrame;
+
 /**
  *
  * @author Heldyis Agüero 
  */
 public class JuegoEnX extends Juego {
-  private ArrayList<Carton> cartonesGanadores;
+  private static ArrayList<Carton> cartonesGanadores;
   
-  public JuegoEnX(Configuracion pTipoDeJuego, double pPremio, Bingo pBingo) {
-        super(pTipoDeJuego, pPremio, pBingo);
-        cartonesGanadores = new ArrayList<>();
+  public JuegoEnX() {
+        
+    cartonesGanadores = new ArrayList<>();
   }
   
-  public boolean buscarGanadores() {
-    ArrayList<Integer> numerosCantados = super.getNumerosCantados();
-    Bingo bingo = super.bingo;
-    for(Carton carton : bingo.getCartonesYaAsignados()) {
+  public static boolean buscarGanadores(ArrayList<Integer> pNumerosCantados,ArrayList<String> pCartonesAsignados) {
+    
+    ArrayList<Carton> cartonesAsignados = convertirCodigosACartones(pCartonesAsignados, Carton.listaCartonesGenerados);
+    for(Carton carton : cartonesAsignados) {
       int[][] matriz = carton.getMatriz();
       ArrayList<Integer> diagonales = obtenerDiagonales(matriz);
       boolean cartonGanador = true;
         for (Integer numero : diagonales) {
-            if (!numerosCantados.contains(numero)) {
+            if (!pNumerosCantados.contains(numero)) {
                 cartonGanador = false;
                 break; // No es necesario continuar verificando
             }
@@ -30,8 +33,27 @@ public class JuegoEnX extends Juego {
             cartonesGanadores.add(carton);
         }
     }
-    return true;
+    return !cartonesGanadores.isEmpty();
   }
+  
+  private static ArrayList<Carton> convertirCodigosACartones(ArrayList<String> codigos, ArrayList<Carton> cartonesDisponibles) {
+    ArrayList<Carton> cartonesAsignados = new ArrayList<>();
+
+    for (String codigo : codigos) {
+        Carton cartonAsignado = null;
+        for (Carton carton : cartonesDisponibles) {
+            if (carton.getCodigoCarton().equals(codigo)) {
+                cartonAsignado = carton;
+                break;
+            }
+        }
+        if (cartonAsignado != null) {
+            cartonesAsignados.add(cartonAsignado);
+        }
+    }
+    return cartonesAsignados;
+}
+
   
   private static ArrayList<Integer> obtenerDiagonales(int[][] matriz) {
         ArrayList<Integer> diagonales = new ArrayList<>();
@@ -53,19 +75,21 @@ public class JuegoEnX extends Juego {
 
         return diagonales;
     }
-  
-  public static void main(String[] args) {
-        int[][] matriz = {
-            {1, 2, 3, 4, 5},
-            {6, 7, 8, 9, 10},
-            {11, 12, 13, 14, 15},
-            {16, 17, 18, 19, 20},
-            {21, 22, 23, 24, 25}
-        };
+    
+  public static ArrayList<String> getListaCodigosCartonesGanadores() {
+    ArrayList<String> codigosCartonesGanadores = new ArrayList<>();
 
-        ArrayList<Integer> diagonales = obtenerDiagonales(matriz);
-
-        System.out.println("Diagonales: " + diagonales);
+    for (Carton carton : cartonesGanadores) {
+        codigosCartonesGanadores.add(carton.getCodigoCarton());
     }
+
+    return codigosCartonesGanadores;
+  }
+  
+  public static ArrayList<Carton> getCartonesGanadores() {
+    return cartonesGanadores;
+  }
+
+
   
 }

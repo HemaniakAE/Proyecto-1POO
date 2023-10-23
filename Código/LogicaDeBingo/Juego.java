@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.Random;
 import java.io.File;
 import java.time.ZoneId;
+import javax.swing.JFrame;
 
 
 
@@ -31,12 +32,11 @@ public class Juego {
   private LocalTime horaDelJuego;
   
 
-  public Juego(Configuracion pTipoDeJuego, double pPremio, Bingo pBingo) {
-    this.tipoDeJuego = pTipoDeJuego;
-    this.premio = pPremio;
+  public Juego() {
+    
     this.fechaDelJuego = LocalDate.now(ZoneId.systemDefault()); // Obtiene la fecha actual del sistema
     this.horaDelJuego = LocalTime.now(ZoneId.systemDefault()); // Obtiene la hora actual del sistema
-    this.bingo = pBingo;
+    
     numerosCantados = new ArrayList<>();
   }
   
@@ -50,19 +50,7 @@ public class Juego {
     return numerosCantados;
   }
   
-  public static void main(String[] args) {
-    Bola bolas = new Bola();
-    Bingo bingo = new Bingo();
-    Juego juego = new Juego(Configuracion.X, 500, bingo);
-    int i = 0;
-    while(i < 75){
-      int bola = juego.generarBolas();
-      System.out.println("bola: " + bola);
-      i++;
-    }
-    System.out.println("Total de bolas generadas");
-    System.out.println("Lista de bolas: " + juego.getNumerosCantados());
-  }
+  
 }
 
 
